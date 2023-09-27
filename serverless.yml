@@ -1,0 +1,20 @@
+service: aws-node-image-resizer
+frameworkVersion: "3"
+ 
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-central-1
+  timeout: 60 # optional, in seconds, default is 6
+
+functions:
+  resizeImage:
+    handler: index.handler
+    events:
+      - s3:
+          bucket: myflix-movie-user-images
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: original-images/
+
+          existing: true
